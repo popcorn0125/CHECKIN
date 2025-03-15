@@ -27,6 +27,12 @@ const Root = () => {
   const [textSearchCondition, setTextSearchCondition] = useState("이름");
   const [textSearchTerm, setTextSearchTerm] = useState("");
   const [dateSearchTerm, setDateSearchTerm] = useState(new Date().toISOString().split('T')[0]);
+  const [timeSearchTerm, setTimeSearchTerm] = useState(()=> {
+    let t = new Date().getHours();
+    if( t < 9) return 9;
+    if(t > 17) return 17;
+    return t;
+  });
 
   const handleEdit = (studentIdx, attIdx, newStatus) => {
     const updatedStudents = students.map((student, sIdx) => {
@@ -70,6 +76,11 @@ const Root = () => {
           </div>
         </div>
 
+        {/* 날짜 및 시간 */}
+        <div className="info-wrap-2">
+          <div className="h3"><div className="text--">{dateSearchTerm} <div className="timeText">{timeSearchTerm}:00 ~ {timeSearchTerm}:59</div></div></div>
+        </div>
+
         {/* 출석 통계 */}
         <div className="info-wrap">
           {[{ color: "blue", title: "전체 학생", count: total },
@@ -85,9 +96,9 @@ const Root = () => {
         </div>
 
         {/* 출결 기록 */}
-        <div className="info-wrap-2">
-          <div className="h3"><div className="text--">{dateSearchTerm}</div></div>
-        </div>
+        {/* <div className="info-wrap-2">
+          <div className="h3"><div className="text--">{dateSearchTerm} <div>{timeSearchTerm}:00 ~ {timeSearchTerm}:59</div></div></div>
+        </div> */}
         
         <table className="table">
           <thead>
@@ -96,7 +107,7 @@ const Root = () => {
               <th>학번</th>
               <th>팀명</th>
               {[...Array(8)].map((_, i) => (
-                <th key={i}>{`${9 + (i >= 3 ? i + 1 : i)}:00`}</th>
+                <th key={i} onClick={() => { setTimeSearchTerm(9 + (i >= 3 ? i + 1 : i))}}>{`${9 + (i >= 3 ? i + 1 : i)}:00`}</th>
               ))}
             </tr>
           </thead>
@@ -114,6 +125,7 @@ const Root = () => {
                   >
                     {editing?.studentIdx === studentIdx && editing?.attIdx === attIdx ? (
                       <select
+                        className="attendanceSelect"
                         value={status}
                         onChange={(e) => handleEdit(studentIdx, attIdx, e.target.value)}
                         onBlur={() => setEditing(null)}

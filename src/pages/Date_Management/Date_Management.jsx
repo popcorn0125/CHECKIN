@@ -83,6 +83,23 @@ const ImportantEvents = () => {
 };
 
 const Root = () => {
+    const [modals, setModals] = useState(false);
+    const [form, setForm] = useState({ title: "", startDate: "", endDate: "", content: "" });
+
+    const toggleModal = (state) => {
+        setModals(state);
+    };
+
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Form Submitted:", form);
+        toggleModal(false);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.wrap}>
@@ -93,12 +110,40 @@ const Root = () => {
                     <Calendar />
                 </div>
                 <div className={styles.calendarWrap}>
-                    <button className={styles.addEventButton}>일정 추가</button>
+                    <button className={styles.addEventButton} onClick={() => toggleModal(true)}>일정 추가</button>
                 </div>
                 <div className={styles.importantEventsWrap}>
                     <ImportantEvents />
                 </div>
             </div>
+
+            {modals && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <span className={styles.close} onClick={() => toggleModal(false)}>&times;</span>
+                        <h2>새로운 일정</h2>
+                        <form onSubmit={handleSubmit}>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="title">제목</label>
+                                <input type="text" id="title" value={form.title} onChange={handleChange} required />
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="date">날짜</label>
+                                <div className={styles.dateRange}>
+                                    <input type="date" id="startDate" value={form.startDate} onChange={handleChange} required />
+                                    <span>~</span>
+                                    <input type="date" id="endDate" value={form.endDate} onChange={handleChange} required />
+                                </div>
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="content">내용</label>
+                                <textarea id="content" value={form.content} onChange={handleChange} required></textarea>
+                            </div>
+                            <button type="submit" className={styles.submitButton}>등록</button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

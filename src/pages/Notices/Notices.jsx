@@ -19,6 +19,7 @@ const Root = () => {
     const [modals, setModals] = useState({ notice: false, survey: false });
     const [form, setForm] = useState({ title: "", date: "", content: "" });
 
+
     const toggleModal = (type) => setModals(prev => ({ ...prev, [type]: !prev[type] }));
     const handleChange = (e) => setForm({ ...form, [e.target.id]: e.target.value });
     const handleSubmit = (e, type) => {
@@ -94,6 +95,32 @@ const Root = () => {
                     </div>
                 </div>
             </div>
+
+            {["notice", "survey"].map(type => (
+                 modals[type] && (
+                     <div key={type} className={styles.modal}>
+                         <div className={styles.modalContent}>
+                             <span className={styles.close} onClick={() => toggleModal(type)}>&times;</span>
+                             <h2>{type === "notice" ? "공지작성" : "설문작성"}</h2>
+                             <form onSubmit={(e) => handleSubmit(e, type)}>
+                                 <div className={styles.formGroup}>
+                                     <label htmlFor="title">제목</label>
+                                     <input type="text" id="title" value={form.title} onChange={handleChange} required />
+                                 </div>
+                                 <div className={styles.formGroup}>
+                                     <label htmlFor="date">날짜</label>
+                                     <input type="date" id="date" value={form.date} onChange={handleChange} required />
+                                 </div>
+                                 <div className={styles.formGroup}>
+                                     <label htmlFor="content">내용</label>
+                                     <textarea id="content" value={form.content} onChange={handleChange} required></textarea>
+                                 </div>
+                                 <button type="submit" className={styles.submitButton}>제출</button>
+                             </form>
+                         </div>
+                     </div>
+                 )
+             ))}
         </div>
     );
 };

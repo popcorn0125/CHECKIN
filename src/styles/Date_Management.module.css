@@ -222,3 +222,111 @@
     font-size: 16px;
     color: #555;
 }
+
+/* 모달 스타일 */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: black;
+}
+
+.modalContent {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+.modalContent h2 {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "42dot Sans", serif;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 폼 스타일 */
+.formGroup {
+    margin-bottom: 16px;
+}
+
+.formGroup label {
+    display: block;
+    font-family: "42dot Sans", serif;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.formGroup input,
+.formGroup textarea {
+    width: 100%;
+    padding: 8px;
+    font-family: "42dot Sans", serif;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #000000;
+    background-color: #FFFFFF;
+    /* 배경색 흰색 */
+}
+
+.formGroup textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    font-family: "42dot Sans", serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submitButton:hover {
+    background-color: #0056b3;
+}
+
+.dateRange {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* 두 날짜 입력 필드 사이 간격 */
+}
+
+.dateRange input {
+    flex: 1;
+    /* 너비 균등 분배 */
+    min-width: 120px;
+    /* 최소 너비 설정 */
+}

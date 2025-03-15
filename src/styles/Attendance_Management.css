@@ -51,6 +51,18 @@
   gap: 10px;
 }
 
+.selectbox-wrap input{
+  font-family: "42dot Sans", serif;
+}
+
+.selectbox-wrap select{
+  font-family: "42dot Sans", serif;
+}
+
+.selectbox-wrap option{
+  font-family: "42dot Sans", serif;
+}
+
 #search {
   width: 15%;
   padding: 8px 40px 8px 12px;
@@ -90,7 +102,7 @@
 /***********************************************/
 .info-wrap {
   width: 95%;
-  margin: 24px auto 0 auto;
+  margin: 4px auto 0 auto;
   display: flex;
   gap: 48px;
 }
@@ -203,8 +215,8 @@
   font-weight: 600;
   color: gray;
   white-space: nowrap;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  /* margin-bottom: 10px; */
 }
 
 /* 드롭다운 박스 */
@@ -329,4 +341,15 @@
   font-size: 14px;
   line-height: 20px;
   color: #000000;
+}
+
+.attendanceSelect {
+  font-family: "42dot Sans", serif;
+}
+
+.timeText {
+  font-size: 24px;
+  color: black;
+  font-weight: bold;
+  margin-top: 10px;
 }

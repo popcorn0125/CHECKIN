@@ -202,6 +202,10 @@
     font-size: 14px;
 }
 
+.surveyWriteBtn:hover {
+    background-color: gray;
+}
+
 .surveyText{
     font-family: "42dot Sans", serif;
     font-size: 14px;
@@ -306,6 +310,12 @@
     width: 80%;
     max-width: 500px;
     border-radius: 8px;
+}
+
+.modalContent h2{
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "42dot Sans", serif;
 }
 
 .close {
