@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../../styles/Account.css";
 import titleImage from '../../assets/images/titleImage.png';
+import axios from 'axios';
 
 const Account = () => {
     const [username, setUsername] = useState("");
@@ -14,7 +15,19 @@ const Account = () => {
 
     const goToHome = () => {
         sessionStorage.removeItem('menu');
-        navigate('/home');
+        // axios,post 부분은 테스트용으로 작성한거라 수정해도 괜찮아요
+        axios.post('/admin/login',{
+            id: 'hahoho',
+            pw: "12221"
+        })
+        .then((response) => {
+            console.log('시큐리티 설정으로 인해 요청 성공', response);
+            navigate('/home');
+        })
+        .catch((error) => {
+            console.log("요청 실패",error);
+        })
+        // navigate('/home');
     }
 
     return (
