@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "../../styles/Student.module.css";
 import Search from '../../assets/icons/search.svg?react';
-
+import axios from 'axios';
 
 const Root = ({}) => {
     const [selectedButton, setSelectedButton] = useState('전체 학생');
@@ -9,24 +9,13 @@ const Root = ({}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchCondition, setSearchCondition] = useState('이름');
-    const [updateStudentInfo, setUpdateStudentInfo] = useState({ department: '', classnumber: '', name: '', phonenumber: '', email: '', grade: '' })
+    const [updateStudentInfo, setUpdateStudentInfo] = useState({id: '', schoolName: '', department: '', classNumber: '', name: '', phoneNumber: '', email: '', grade: '', pw: '', teamName: '' })
 
-    const students = [
-        { department: '소프트웨어학과', classnumber: '2024001', name: '고정윤', phonenumber: '010-1234-5678', email: 'jyko@email.com', grade: '1학년' },
-        { department: '컴퓨터공학과', classnumber: '2023015', name: '김준식', phonenumber: '010-9876-5432', email: 'jskim@email.com', grade: '2학년' },
-        { department: '정보통신학과', classnumber: '2024003', name: '박민지', phonenumber: '010-2345-6789', email: 'mjpark@email.com', grade: '1학년' },
-        { department: '소프트웨어학과', classnumber: '2024002', name: '이수민', phonenumber: '010-3456-7890', email: 'suminlee@email.com', grade: '1학년' },
-        { department: '컴퓨터공학과', classnumber: '2023016', name: '최영수', phonenumber: '010-4567-8901', email: 'youngsoochoi@email.com', grade: '2학년' },
-        { department: '정보통신학과', classnumber: '2024004', name: '한지민', phonenumber: '010-5678-9012', email: 'jiminhan@email.com', grade: '1학년' },
-        { department: '소프트웨어학과', classnumber: '2024005', name: '박지훈', phonenumber: '010-6789-0123', email: 'jihunpark@email.com', grade: '1학년' },
-        { department: '컴퓨터공학과', classnumber: '2023017', name: '김민수', phonenumber: '010-7890-1234', email: 'minsookim@email.com', grade: '2학년' },
-        { department: '정보통신학과', classnumber: '2024006', name: '정예린', phonenumber: '010-8901-2345', email: 'yerinjeong@email.com', grade: '1학년' },
-        { department: '소프트웨어학과', classnumber: '2024007', name: '홍길동', phonenumber: '010-9012-3456', email: 'gildonghong@email.com', grade: '1학년' },
-        { department: '소프트웨어학과', classnumber: '2023001', name: '김영희', phonenumber: '010-1111-2222', email: 'younghee.kim@email.com', grade: '3학년' },
-        { department: '컴퓨터공학과', classnumber: '2023002', name: '이철수', phonenumber: '010-3333-4444', email: 'chulsoo.lee@email.com', grade: '3학년' },
-        { department: '정보통신학과', classnumber: '2022001', name: '박영수', phonenumber: '010-5555-6666', email: 'youngsoo.park@email.com', grade: '4학년' },
-        { department: '소프트웨어학과', classnumber: '2022002', name: '최민지', phonenumber: '010-7777-8888', email: 'minji.choi@email.com', grade: '4학년' },
-    ];
+    const [students, setStudents] = useState([]);
+    // const students = [
+    //     {schoolName: '대구가톨릭대학교', department: '소프트웨어학과', classNumber: '2024001', name: '고정윤', phoneNumber: '010-1234-5678', email: 'jyko@email.com', grade: '1학년', pw: '1234', teamName: '세미콜론' },
+    //     
+    // ];
 
     const handleButtonClick = (buttonName) => {
         setSelectedButton(buttonName);
@@ -34,13 +23,13 @@ const Root = ({}) => {
     };
 
     const handleStudentAddClick = () => {
-        setUpdateStudentInfo({ department: '', classnumber: '', name: '', phonenumber: '', email: '', grade: '' })
+        setUpdateStudentInfo({id: '', schoolName: '',department: '', classNumber: '', name: '', phoneNumber: '', email: '', grade: '' , pw: '', teamName: ''})
         setIsStudentAddSelected(true);
         setIsModalOpen(true);
     };
 
     const handleStudentUpdateClick = (student) => {
-        setUpdateStudentInfo({department: student.department, classnumber: student.classnumber, name: student.name, phonenumber: student.phonenumber, email: student.email, grade: student.grade})
+        setUpdateStudentInfo({id: student.id,schoolName: student.schoolName, department: student.department, classNumber: student.classNumber, name: student.name, phoneNumber: student.phoneNumber, email: student.email, grade: student.grade, pw: student.pw, teamName: student.teamName})
         setIsStudentAddSelected(false);
         setIsModalOpen(true);
     }
@@ -55,6 +44,74 @@ const Root = ({}) => {
 
     const handleSearchConditionChange = (event) => {
         setSearchCondition(event.target.value);
+    };
+
+    // 모달창 저장 or 수정 버튼 클릭시 실행되는 함수
+    const clickModalBtn = () => {
+        console.log('학생 정보 : ', updateStudentInfo);
+        const data = {
+            id: updateStudentInfo.id,
+            classNumber: updateStudentInfo.classNumber,
+            department: updateStudentInfo.department,
+            name: updateStudentInfo.name,
+            phoneNumber: updateStudentInfo.phoneNumber,
+            email: updateStudentInfo.email,
+            grade: updateStudentInfo.grade,
+            pw: updateStudentInfo.pw,
+            teamName: updateStudentInfo.teamName,
+            schoolName: updateStudentInfo.schoolName
+        }
+        if(isStudentAddSelected) {
+            axios.post('/admin/store-students',{
+                data: data
+            })
+            .then((response) => {
+                console.log('저장 요청 성공', response);
+                if(response.data.statusCode == 200) {
+                    setUpdateStudentInfo({id: '', schoolName: '', department: '', classNumber: '', name: '', phoneNumber: '', email: '', grade: '' , pw: '', teamName: ''});
+                    closeModal();
+                    alert(response.data.responseMessage);
+                    infoStudentsList();
+                } else {
+                    alert("저장 실패");
+                }
+                
+            })
+            .catch((error) => {
+                console.log("예기치 못한 오류가 발생했습니다.",error);
+            })
+        } else {
+            axios.post('/admin/update-students',{
+                data
+            })
+            .then((response) => {
+                console.log('수정 요청 성공', response);
+                if(response.data.statusCode == 200) {
+                    setUpdateStudentInfo({id: '', schoolName: '', department: '', classNumber: '', name: '', phoneNumber: '', email: '', grade: '' , pw: '', teamName: ''});
+                    closeModal();
+                    alert(response.data.responseMessage);
+                    infoStudentsList();
+                } else {
+                    alert("수정 실패");
+                }
+                
+            })
+            .catch((error) => {
+                console.log("예기치 못한 오류가 발생했습니다.",error);
+            })
+        }
+    }
+
+    const handleInputChange = (e) => {
+        console.log('실행 1')
+        const { name, value } = e.target;
+        console.log('실행 2')
+        setUpdateStudentInfo(prevState => ({
+            ...prevState,
+            [name]: value // 기존 상태를 유지하면서 변경된 값만 업데이트
+        }));
+        console.log('실행 3')
+
     };
 
     const filteredStudents = students.filter(student => {
@@ -73,6 +130,31 @@ const Root = ({}) => {
         : selectedButton === '학과별'
         ? filteredStudents.sort((a, b) => a.department.localeCompare(b.department))
         : filteredStudents;
+
+
+    useEffect(() => {
+        console.log("mounted 실행");
+        infoStudentsList();
+    }, [])
+
+    // 학생 정보 리스트 불러오기
+    const infoStudentsList = () => {
+        axios.post('/admin/loading-students',{
+            id : "hoho"
+        })
+        .then((response) => {
+            console.log('학생 정보 불러오기 성공', response);
+            if(response.data.statusCode == 200) {
+                setStudents(response.data.data);
+            } else {
+                alert("불러오기 실패");
+            }
+            
+        })
+        .catch((error) => {
+            console.log("예기치 못한 오류가 발생했습니다.",error);
+        })
+    }
 
     return (
         <div className={styles.container}>
@@ -132,7 +214,7 @@ const Root = ({}) => {
                     <div className={styles.thead}>
                         <div className={styles.tr}>
                             <div className={styles.th}>
-                                <div className={styles.classnumber}>학번</div>
+                                <div className={styles.classNumber}>학번</div>
                             </div>
                             <div className={styles.th}>
                                 <div className={styles.name}>이름</div>
@@ -144,7 +226,7 @@ const Root = ({}) => {
                                 <div className={styles.department}>학과</div>
                             </div>
                             <div className={styles.th}>
-                                <div className={styles.phonenumber}>전화번호</div>
+                                <div className={styles.phoneNumber}>전화번호</div>
                             </div>
                             <div className={styles.th}>
                                 <div className={styles.email}>이메일</div>
@@ -155,7 +237,7 @@ const Root = ({}) => {
                         {sortedStudents.map((student, index) => (
                             <div className={styles.tr} key={index}>
                                 <div className={styles.td}>
-                                    <div className={styles.classnumber}>{student.classnumber}</div>
+                                    <div className={styles.classnumber}>{student.classNumber}</div>
                                 </div>
                                 <div className={styles.td}>
                                     <div className={styles.name} onClick={() => handleStudentUpdateClick(student)}>{student.name}</div>
@@ -167,7 +249,7 @@ const Root = ({}) => {
                                     <div className={styles.department}>{student.department}</div>
                                 </div>
                                 <div className={styles.td}>
-                                    <div className={styles.phonenumber}>{student.phonenumber}</div>
+                                    <div className={styles.phonenumber}>{student.phoneNumber}</div>
                                 </div>
                                 <div className={styles.td}>
                                     <div className={styles.email}>{student.email}</div>
@@ -185,35 +267,50 @@ const Root = ({}) => {
                         <form>
                             <label>
                                 이름:
-                                <input type="text" name="name" value={updateStudentInfo.name} />
+                                <input type="text" name="name" value={updateStudentInfo.name} onChange={handleInputChange}/>
+                            </label>
+                            <br />
+                            <label>
+                                학교명:
+                                <input type="text" name="schoolName" value={updateStudentInfo.schoolName} onChange={handleInputChange}/>
                             </label>
                             <br />
                             <label>
                                 학번:
-                                <input type="text" name="classnumber" value={updateStudentInfo.classnumber} />
+                                <input type="text" name="classNumber" value={updateStudentInfo.classNumber} onChange={handleInputChange}/>
                             </label>
                             <br />
                             <label>
                                 학년:
-                                <input type="text" name="grade" value={updateStudentInfo.grade} />
+                                <input type="text" name="grade" value={updateStudentInfo.grade} onChange={handleInputChange}/>
                             </label>
                             <br />
                             <label>
                                 학과:
-                                <input type="text" name="department" value={updateStudentInfo.department} />
+                                <input type="text" name="department" value={updateStudentInfo.department} onChange={handleInputChange}/>
                             </label>
                             <br />
                             <label>
                                 전화번호:
-                                <input type="text" name="phonenumber" value={updateStudentInfo.phonenumber} />
+                                <input type="text" name="phoneNumber" value={updateStudentInfo.phoneNumber} onChange={handleInputChange}/>
                             </label>
                             <br />
                             <label>
                                 이메일:
-                                <input type="email" name="email" value={updateStudentInfo.email} />
+                                <input type="email" name="email" value={updateStudentInfo.email} onChange={handleInputChange}/>
                             </label>
                             <br />
-                            <button className={styles.submitBtn} type="submit">
+                            <label>
+                                비빌번호:
+                                <input type="password" name="pw" value={updateStudentInfo.pw} onChange={handleInputChange}/>
+                            </label>
+                            <br />
+                            <label>
+                                팀명:
+                                <input type="text" name="teamName" value={updateStudentInfo.teamName} onChange={handleInputChange}/>
+                            </label>
+                            <br />
+                            <button className={styles.submitBtn} type="button" onClick={()=> clickModalBtn()}>
                                 {isStudentAddSelected ? "저장" : "수정"}
                             </button>
                         </form>
