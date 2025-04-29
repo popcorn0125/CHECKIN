@@ -1,14 +1,14 @@
 package com.example.checkin.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(schema = "checkin")
 public class Students {
     @Id
@@ -42,5 +42,8 @@ public class Students {
 
     @Column(name = "pw", nullable = false, length = 255)
     private String pw;
+
+    @Column(name = "is_deleted", length = 1)
+    private char isDeleted;
 
 }
