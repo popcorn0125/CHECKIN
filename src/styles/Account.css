@@ -79,6 +79,16 @@ h2 {
     justify-content: flex-end;
 }
 
+.registerButton{
+    background: none;
+    border: none;
+    color: #777;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
 .loginButton {
     background: none;
     border: none;
@@ -88,6 +98,7 @@ h2 {
     text-decoration: underline;
     padding: 0;
 }
+
 
 .passButton {
     background: none;
@@ -105,4 +116,8 @@ h2 {
 
 .link-button:hover {
     color: #333;
+}
+
+.registerButton {
+    margin-right: auto;
 }
